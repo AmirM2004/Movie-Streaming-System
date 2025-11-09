@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل کاربری - سایت فیلم</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Vazir';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/Vazir-Regular.woff2') format('woff2');
+        }
+        body {
+            font-family: 'Vazir', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .movie-card {
+            transition: transform 0.2s;
+        }
+        .movie-card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <!-- نوار ناوبری -->
+    <nav class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <span id="welcomeUser" class="text-lg"></span>
+                <span id="walletBalance" class="bg-green-600 px-3 py-1 rounded-full text-sm"></span>
+            </div>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <button onclick="showWatchHistory()" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">تاریخچه تماشا</button>
+                <button onclick="showTransactions()" class="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700">تراکنش‌ها</button>
+                <button onclick="showSubscription()" class="bg-yellow-600 px-4 py-2 rounded hover:bg-yellow-700">اشتراک</button>
+                <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded hover:bg-red-700">خروج</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- بخش اصلی -->
+    <main class="container mx-auto mt-8 p-4">
+        <!-- فیلترها و جستجو -->
+        <div class="bg-white p-4 rounded-lg shadow mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <input type="text" id="searchInput" placeholder="جستجوی فیلم..." 
+                           class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <select id="genreFilter" class="w-full p-2 border rounded">
+                        <option value="">همه ژانرها</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="sortBy" class="w-full p-2 border rounded">
+                        <option value="rating">مرتب‌سازی براساس امتیاز</option>
+                        <option value="views">مرتب‌سازی براساس بازدید</option>
+                    </select>
+                </div>
+                <div>
+                    <button onclick="applyFilters()" 
+                            class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+                        اعمال فیلترها
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- نمایش فیلم‌ها -->
+        <div id="moviesList" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- فیلم‌ها اینجا به صورت داینامیک اضافه می‌شوند -->
+        </div>
+    </main>
+
+    <!-- مودال‌ها -->
+
+
+    <!-- مودال جزئیات فیلم -->
+    <div id="movieModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+        <div class="relative bg-white rounded-lg max-w-4xl mx-auto my-8 p-6">
+            <button onclick="closeMovieModal()" 
+                    class="absolute left-4 top-4 bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-700">
+                ✕
+            </button>
+            <div id="movieDetails"></div>
+            <div class="mt-4">
+                <h3 class="text-xl font-bold mb-4">نظرات</h3>
+                <div id="movieReviews" class="space-y-4 max-h-[300px] overflow-y-auto"></div>
+                <div class="mt-4">
+                    <textarea id="newReview" rows="3" placeholder="نظر خود را بنویسید..." 
+                            class="w-full p-2 border rounded"></textarea>
+
+                    <div class="flex items-center mt-2">
+                        <input type="number" id="rating" min="1" max="10" placeholder="امتیاز (1-10)" 
+                                class="w-24 p-2 border rounded ml-2">
+                        <button onclick="submitReview()" 
+                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                            ثبت نظر
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال تراکنش‌ها -->
+    <div id="transactionsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg max-w-2xl mx-auto mt-20 p-6">
+            <h2 class="text-2xl font-bold mb-4">تاریخچه تراکنش‌ها</h2>
+            <div id="transactionsList" class="space-y-2"></div>
+            <div class="mt-4">
+                <input type="number" id="chargeAmount" placeholder="مبلغ شارژ (دلار)" 
+                       class="p-2 border rounded ml-2">
+                <button onclick="chargeWallet()" 
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    شارژ حساب
+                </button>
+            </div>
+            <button onclick="closeTransactionsModal()" 
+                    class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                بستن
+            </button>
+        </div>
+    </div>
+
+    <!-- مودال اشتراک -->
+    <div id="subscriptionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg max-w-2xl mx-auto mt-20 p-6">
+            <h2 class="text-2xl font-bold mb-4">وضعیت اشتراک</h2>
+            <div id="subscriptionDetails"></div>
+            <div class="mt-4">
+                <h3 class="text-xl font-bold mb-2">خرید اشتراک جدید</h3>
+                <select id="subscriptionPlan" class="w-full p-2 border rounded mb-2">
+                    <option value="monthly">اشتراک یک ماهه - 10 دلار</option>
+                    <option value="quarterly">اشتراک سه ماهه - 25 دلار</option>
+                    <option value="yearly">اشتراک یک ساله - 90 دلار</option>
+                </select>
+                <button onclick="purchaseSubscription()" 
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    خرید اشتراک
+                </button>
+            </div>
+            <button onclick="closeSubscriptionModal()" 
+                    class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                بستن
+            </button>
+        </div>
+    </div>
+
+    <!-- مودال تاریخچه تماشا -->
+    <div id="watchHistoryModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg max-w-2xl mx-auto mt-20 p-6">
+            <h2 class="text-2xl font-bold mb-4">تاریخچه تماشا</h2>
+            <div id="watchHistoryList" class="space-y-2"></div>
+            <button onclick="closeWatchHistoryModal()" 
+                    class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                بستن
+            </button>
+        </div>
+    </div>
+
+    <script src="user.js"></script>
+</body>
+</html>
+
+

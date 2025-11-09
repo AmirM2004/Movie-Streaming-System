@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت سیستم فیلم</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- نوار ناوبری -->
+    <nav class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <span id="welcomeAdmin" class="text-xl"></span>
+            <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                <i class="fas fa-sign-out-alt ml-2"></i>خروج
+            </button>
+        </div>
+    </nav>
+
+    <!-- منوی اصلی -->
+    <div class="container mx-auto mt-8">
+        <div class="flex flex-wrap -mx-4">
+            <!-- منوی کناری -->
+            <div class="w-full md:w-1/4 px-4">
+                <div class="bg-white rounded-lg shadow p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <button onclick="showSection('users')" class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded">
+                                <i class="fas fa-users ml-2"></i>مدیریت کاربران
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('movies')" class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded">
+                                <i class="fas fa-film ml-2"></i>مدیریت فیلم‌ها
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('genres')" class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded">
+                                <i class="fas fa-tags ml-2"></i>مدیریت ژانرها
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('transactions')" class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded">
+                                <i class="fas fa-money-bill-wave ml-2"></i>تاریخچه تراکنش‌ها
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- محتوای اصلی -->
+            <div class="w-full md:w-3/4 px-4">
+                <!-- بخش کاربران -->
+                <div id="users" class="section bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl mb-6">مدیریت کاربران</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="px-4 py-2 text-center">نام کاربری</th>
+                                    <th class="px-4 py-2 text-center">ایمیل</th>
+                                    <th class="px-4 py-2 text-center">تعداد فیلم‌های دیده شده</th>
+                                    <th class="px-4 py-2 text-center">تعداد نظرات</th>
+                                    <th class="px-4 py-2 text-center">کیف پول</th>
+                                    <th class="px-4 py-2 text-center">اشتراک</th>
+                                    <th class="px-4 py-2 text-center">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- محتوا با JavaScript پر می‌شود -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- بخش فیلم‌ها -->
+                <div id="movies" class="section bg-white rounded-lg shadow p-6 hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl">مدیریت فیلم‌ها</h2>
+                        <button onclick="showMovieModal()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <i class="fas fa-plus ml-2"></i>افزودن فیلم جدید
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="px-4 py-2 text-center">تصویر</th>
+                                    <th class="px-4 py-2 text-center">عنوان</th>
+                                    <th class="px-4 py-2 text-center">ژانر</th>
+                                    <th class="px-4 py-2 text-center">تاریخ انتشار</th>
+                                    <th class="px-4 py-2 text-center">تعداد بازدید</th>
+                                    <th class="px-4 py-2 text-center">تعداد نظرات</th>
+                                    <th class="px-4 py-2 text-center">امتیاز</th>
+                                    <th class="px-4 py-2 text-center">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="moviesTableBody">
+                                <!-- محتوا با JavaScript پر می‌شود -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- بخش ژانرها -->
+                <div id="genres" class="section bg-white rounded-lg shadow p-6 hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl">مدیریت ژانرها</h2>
+                        <button onclick="showGenreModal()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <i class="fas fa-plus ml-2"></i>افزودن ژانر جدید
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="px-4 py-2 text-center">نام ژانر</th>
+                                    <th class="px-4 py-2 text-center">تعداد بازدید</th>
+                                    <th class="px-4 py-2 text-center">تعداد نظرات</th>
+                                    <th class="px-4 py-2 text-center">میانگین امتیاز</th>
+                                    <th class="px-4 py-2 text-center">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="genresTableBody">
+                                <!-- محتوا با JavaScript پر می‌شود -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- بخش تراکنش‌ها -->
+                <div id="transactions" class="section bg-white rounded-lg shadow p-6 hidden">
+                    <h2 class="text-2xl mb-6">تاریخچه تراکنش‌ها</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="px-4 py-2 text-center">کاربر</th>
+                                    <th class="px-4 py-2 text-center">نوع تراکنش</th>
+                                    <th class="px-4 py-2 text-center">مبلغ</th>
+                                    <th class="px-4 py-2 text-center">تاریخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <!-- محتوا با JavaScript پر می‌شود -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال افزودن فیلم -->
+    <div id="movieModal" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg w-11/12 md:w-2/3 lg:w-1/2 mx-auto mt-20 p-6">
+            <h3 class="text-xl mb-4" id="movieModalTitle">افزودن فیلم جدید</h3>
+            <form id="movieForm" class="space-y-4">
+                <div>
+                    <label class="block mb-1">عنوان فیلم</label>
+                    <input type="text" id="movieTitle" class="w-full border rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1">ژانر</label>
+                    <select id="movieGenre" class="w-full border rounded p-2" required>
+                        <!-- گزینه‌ها با JavaScript پر می‌شود -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-1">تاریخ انتشار</label>
+                    <input type="date" id="movieReleaseDate" class="w-full border rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block mb-1">تصویر فیلم</label>
+                    <input type="file" id="movieImage" accept="image/*" class="w-full border rounded p-2" required>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeMovieModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">لغو</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال افزودن ژانر -->
+    <div id="genreModal" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg w-11/12 md:w-2/3 lg:w-1/2 mx-auto mt-20 p-6">
+            <h3 class="text-xl mb-4" id="genreModalTitle">افزودن ژانر جدید</h3>
+            <form id="genreForm" class="space-y-4">
+                <div>
+                    <label class="block mb-1">نام ژانر</label>
+                    <input type="text" id="genreName" class="w-full border rounded p-2" required>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeGenreModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">لغو</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
